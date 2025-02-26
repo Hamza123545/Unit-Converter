@@ -2,6 +2,18 @@ import streamlit as st
 import google.generativeai as genai
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
+# Load the API key from Streamlit secrets or environment variables
+api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+
+# Initialize Gemini
+if api_key:
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-2.0-flash')
+else:
+    st.error("API key not found. Please set the GEMINI_API_KEY in Streamlit secrets or environment variables.")
+    st.stop()
 
 # Define conversion functions for all categories
 def convert_length(value, from_unit, to_unit):
@@ -146,10 +158,6 @@ def convert_speed(value, from_unit, to_unit):
         'knot': 0.514444
     }
     return value * speed_conversions[from_unit] / speed_conversions[to_unit]
-
-# Initialize Gemini
-genai.configure(api_key="AIzaSyC7E9nn3PlMguT5NiLgNjefi3Fm0icOc2E")  # Replace with your Gemini API key
-model = genai.GenerativeModel('gemini-2.0-flash')  # Use the correct model name
 
 # Streamlit app
 st.set_page_config(page_title="Unit Converter", page_icon="📏", layout="centered")
@@ -445,8 +453,6 @@ for spine in ax.spines.values():
 
 # Display the plot in Streamlit
 st.pyplot(fig)
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 

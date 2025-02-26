@@ -162,14 +162,14 @@ def convert_speed(value, from_unit, to_unit):
 # Streamlit app
 st.set_page_config(page_title="Unit Converter", page_icon="📏", layout="centered")
 
-# Custom CSS with gradient background and modern design
+# Custom CSS with dark theme
 st.markdown(
     """
     <style>
-    /* Gradient background */
+    /* Dark background */
     body {
-        background: linear-gradient(135deg, #6a11cb, #2575fc);
-        color: white;
+        background-color: #121212;
+        color: #ffffff;
         font-family: 'Arial', sans-serif;
     }
 
@@ -179,7 +179,7 @@ st.markdown(
         margin: auto;
         padding: 2rem;
         border-radius: 1rem;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(18, 18, 18, 0.9);
         backdrop-filter: blur(10px);
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         border: 1px solid rgba(255, 255, 255, 0.18);
@@ -189,7 +189,7 @@ st.markdown(
     .title {
         font-size: 2.5rem;
         font-weight: 700;
-        color: white;
+        color: #ffffff;
         text-align: center;
         margin-bottom: 1.5rem;
     }
@@ -206,7 +206,7 @@ st.markdown(
     .stNumberInput, .stSelectbox {
         width: 100% !important;
         margin-bottom: 1rem;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
         border: none;
         border-radius: 0.5rem;
         padding: 0.75rem;
@@ -429,18 +429,18 @@ ax.annotate(f'{result:.2f} {to_unit}', xy=(value, result), xytext=(value + 5, re
             arrowprops=dict(facecolor='red', shrink=0.05), fontsize=12, color='red')
 
 # Set labels and title with better styling
-ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#333333')
-ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#333333')
-ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#333333')
+ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#ffffff')
+ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#ffffff')
+ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#ffffff')
 
 # Customize the legend
 ax.legend(loc='upper left', fontsize=12, framealpha=0.9)
 
 # Customize the ticks
-ax.tick_params(axis='both', which='major', labelsize=12, colors='#333333')
+ax.tick_params(axis='both', which='major', labelsize=12, colors='#ffffff')
 
 # Add a background color to the plot
-ax.set_facecolor('#f7f7f7')
+ax.set_facecolor('#1e1e1e')
 
 # Remove top and right spines
 ax.spines['top'].set_visible(False)
@@ -448,7 +448,7 @@ ax.spines['right'].set_visible(False)
 
 # Add a subtle shadow to the plot
 for spine in ax.spines.values():
-    spine.set_edgecolor('#333333')
+    spine.set_edgecolor('#ffffff')
     spine.set_linewidth(1.5)
 
 # Display the plot in Streamlit

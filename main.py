@@ -3,6 +3,7 @@ import google.generativeai as genai
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from tenacity import retry, stop_after_attempt, wait_fixed
 
 # Load the API key from Streamlit secrets or environment variables
 api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
@@ -168,8 +169,8 @@ st.markdown(
     <style>
     /* Dark background for the entire app */
     body {
-        background-color: 	#000000;
-        color: #000000;
+        background-color: #121212;
+        color: #ffffff;
         font-family: 'Arial', sans-serif;
     }
 
@@ -189,7 +190,7 @@ st.markdown(
     .title {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #000000;
+        color: #ffffff;
         text-align: center;
         margin-bottom: 1.5rem;
     }
@@ -197,8 +198,7 @@ st.markdown(
     /* Description */
     .description {
         font-size: 1.1rem;
-        color: rgba(0, 0, 0, 0.8);
-;
+        color: rgba(255, 255, 255, 0.8);
         text-align: center;
         margin-bottom: 2rem;
     }
@@ -211,14 +211,14 @@ st.markdown(
         border: none;
         border-radius: 0.5rem;
         padding: 0.75rem;
-        color: black;
+        color: white;
     }
 
     /* Button */
     .stButton button {
         width: 100%;
         background: linear-gradient(135deg, #6a11cb, #2575fc);
-        color: black;
+        color: white;
         font-size: 1rem;
         font-weight: 600;
         padding: 0.75rem;
@@ -234,7 +234,7 @@ st.markdown(
     .result {
         font-size: 2.5rem;
         font-weight: 700;
-        color: black;
+        color: white;
         text-align: center;
         margin-top: 2rem;
         margin-bottom: 2rem;
@@ -243,7 +243,7 @@ st.markdown(
     /* Explanation box */
     .explanation {
         font-size: 1rem;
-        color: black;
+        color: white;
         margin-top: 1.5rem;
         padding: 1.5rem;
         background: rgba(255, 255, 255, 0.1);
@@ -256,8 +256,7 @@ st.markdown(
     /* Footer */
     .footer {
         font-size: 0.875rem;
-        color: color: rgba(0, 0, 0, 0.8);
-;
+        color: rgba(255, 255, 255, 0.7);
         text-align: center;
         margin-top: 2rem;
     }
@@ -327,44 +326,51 @@ with col3:
     from_unit = st.selectbox("From", units)
     to_unit = st.selectbox("To", units)
 
-# Perform conversion
-if category == "Data Transfer Rate":
-    result = convert_data_transfer_rate(value, from_unit, to_unit)
-elif category == "Digital Storage":
-    result = convert_digital_storage(value, from_unit, to_unit)
-elif category == "Energy":
-    result = convert_energy(value, from_unit, to_unit)
-elif category == "Frequency":
-    result = convert_frequency(value, from_unit, to_unit)
-elif category == "Fuel Economy":
-    result = convert_fuel_economy(value, from_unit, to_unit)
-elif category == "Length":
-    result = convert_length(value, from_unit, to_unit)
-elif category == "Mass":
-    result = convert_mass(value, from_unit, to_unit)
-elif category == "Plane Angle":
-    result = convert_plane_angle(value, from_unit, to_unit)
-elif category == "Pressure":
-    result = convert_pressure(value, from_unit, to_unit)
-elif category == "Speed":
-    result = convert_speed(value, from_unit, to_unit)
-elif category == "Temperature":
-    result = convert_temperature(value, from_unit, to_unit)
-elif category == "Time":
-    result = convert_time(value, from_unit, to_unit)
-elif category == "Volume":
-    result = convert_volume(value, from_unit, to_unit)
-else:
-    result = "Unsupported conversion"
+# Perform conversion with error handling
+try:
+    if category == "Data Transfer Rate":
+        result = convert_data_transfer_rate(value, from_unit, to_unit)
+    elif category == "Digital Storage":
+        result = convert_digital_storage(value, from_unit, to_unit)
+    elif category == "Energy":
+        result = convert_energy(value, from_unit, to_unit)
+    elif category == "Frequency":
+        result = convert_frequency(value, from_unit, to_unit)
+    elif category == "Fuel Economy":
+        result = convert_fuel_economy(value, from_unit, to_unit)
+    elif category == "Length":
+        result = convert_length(value, from_unit, to_unit)
+    elif category == "Mass":
+        result = convert_mass(value, from_unit, to_unit)
+    elif category == "Plane Angle":
+        result = convert_plane_angle(value, from_unit, to_unit)
+    elif category == "Pressure":
+        result = convert_pressure(value, from_unit, to_unit)
+    elif category == "Speed":
+        result = convert_speed(value, from_unit, to_unit)
+    elif category == "Temperature":
+        result = convert_temperature(value, from_unit, to_unit)
+    elif category == "Time":
+        result = convert_time(value, from_unit, to_unit)
+    elif category == "Volume":
+        result = convert_volume(value, from_unit, to_unit)
+    else:
+        result = "Unsupported conversion"
 
-# Display the result in a large and prominent way
-st.markdown(f'<div class="result">Converted value: <strong>{result:.2f}</strong></div>', unsafe_allow_html=True)
+    # Display the result
+    st.markdown(f'<div class="result">Converted value: <strong>{result:.2f}</strong></div>', unsafe_allow_html=True)
 
-# Use Gemini to generate a response
-if st.button("Explain Conversion"):
-    prompt = f"Explain the conversion of {value} {from_unit} to {to_unit}. The result is {result}."
-    response = model.generate_content(prompt)
-    st.markdown(f'<div class="explanation"><strong>Gemini Explanation:</strong><br>{response.text}</div>', unsafe_allow_html=True)
+    # Use Gemini to generate a response
+    if st.button("Explain Conversion"):
+        try:
+            prompt = f"Explain the conversion of {value} {from_unit} to {to_unit}. The result is {result}."
+            response = model.generate_content(prompt)
+            st.markdown(f'<div class="explanation"><strong>Gemini Explanation:</strong><br>{response.text}</div>', unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Failed to generate explanation: {e}")
+
+except Exception as e:
+    st.error(f"An error occurred during conversion: {e}")
 
 # Add a graph for visualization
 st.markdown('<div class="graph-container">', unsafe_allow_html=True)
@@ -431,15 +437,15 @@ ax.annotate(f'{result:.2f} {to_unit}', xy=(value, result), xytext=(value + 5, re
             arrowprops=dict(facecolor='red', shrink=0.05), fontsize=12, color='red')
 
 # Set labels and title with better styling
-ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#000000')
-ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#000000')
-ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#000000')
+ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#ffffff')
+ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#ffffff')
+ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#ffffff')
 
 # Customize the legend
 ax.legend(loc='upper left', fontsize=12, framealpha=0.9)
 
 # Customize the ticks
-ax.tick_params(axis='both', which='major', labelsize=12, colors='#000000')
+ax.tick_params(axis='both', which='major', labelsize=12, colors='#ffffff')
 
 # Add a background color to the plot
 ax.set_facecolor('#1e1e1e')
@@ -450,7 +456,7 @@ ax.spines['right'].set_visible(False)
 
 # Add a subtle shadow to the plot
 for spine in ax.spines.values():
-    spine.set_edgecolor('#000000')
+    spine.set_edgecolor('#ffffff')
     spine.set_linewidth(1.5)
 
 # Display the plot in Streamlit
@@ -459,7 +465,7 @@ st.pyplot(fig)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
-st.markdown('<div class="footer">Made by ❤️ Muhammad Hamza</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made with ❤️ by Muhammad Hamza</div>', unsafe_allow_html=True)
 
 # Close main container
 st.markdown('</div>', unsafe_allow_html=True)

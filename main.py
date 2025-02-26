@@ -166,10 +166,10 @@ st.set_page_config(page_title="Unit Converter", page_icon="📏", layout="center
 st.markdown(
     """
     <style>
-    /* Dark background */
+    /* Dark background for the entire app */
     body {
-        background-color: #121212;
-        color: #ffffff;
+        background-color: 	#000000;
+        color: #000000;
         font-family: 'Arial', sans-serif;
     }
 
@@ -189,7 +189,7 @@ st.markdown(
     .title {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #ffffff;
+        color: #000000;
         text-align: center;
         margin-bottom: 1.5rem;
     }
@@ -197,7 +197,8 @@ st.markdown(
     /* Description */
     .description {
         font-size: 1.1rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(0, 0, 0, 0.8);
+;
         text-align: center;
         margin-bottom: 2rem;
     }
@@ -210,14 +211,14 @@ st.markdown(
         border: none;
         border-radius: 0.5rem;
         padding: 0.75rem;
-        color: white;
+        color: black;
     }
 
     /* Button */
     .stButton button {
         width: 100%;
         background: linear-gradient(135deg, #6a11cb, #2575fc);
-        color: white;
+        color: black;
         font-size: 1rem;
         font-weight: 600;
         padding: 0.75rem;
@@ -233,7 +234,7 @@ st.markdown(
     .result {
         font-size: 2.5rem;
         font-weight: 700;
-        color: white;
+        color: black;
         text-align: center;
         margin-top: 2rem;
         margin-bottom: 2rem;
@@ -242,7 +243,7 @@ st.markdown(
     /* Explanation box */
     .explanation {
         font-size: 1rem;
-        color: white;
+        color: black;
         margin-top: 1.5rem;
         padding: 1.5rem;
         background: rgba(255, 255, 255, 0.1);
@@ -255,7 +256,8 @@ st.markdown(
     /* Footer */
     .footer {
         font-size: 0.875rem;
-        color: rgba(255, 255, 255, 0.7);
+        color: color: rgba(0, 0, 0, 0.8);
+;
         text-align: center;
         margin-top: 2rem;
     }
@@ -429,15 +431,15 @@ ax.annotate(f'{result:.2f} {to_unit}', xy=(value, result), xytext=(value + 5, re
             arrowprops=dict(facecolor='red', shrink=0.05), fontsize=12, color='red')
 
 # Set labels and title with better styling
-ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#ffffff')
-ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#ffffff')
-ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#ffffff')
+ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='#000000')
+ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='#000000')
+ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='#000000')
 
 # Customize the legend
 ax.legend(loc='upper left', fontsize=12, framealpha=0.9)
 
 # Customize the ticks
-ax.tick_params(axis='both', which='major', labelsize=12, colors='#ffffff')
+ax.tick_params(axis='both', which='major', labelsize=12, colors='#000000')
 
 # Add a background color to the plot
 ax.set_facecolor('#1e1e1e')
@@ -448,7 +450,7 @@ ax.spines['right'].set_visible(False)
 
 # Add a subtle shadow to the plot
 for spine in ax.spines.values():
-    spine.set_edgecolor('#ffffff')
+    spine.set_edgecolor('#000000')
     spine.set_linewidth(1.5)
 
 # Display the plot in Streamlit

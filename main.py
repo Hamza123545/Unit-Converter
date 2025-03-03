@@ -76,36 +76,6 @@ def convert_speed(value, from_unit, to_unit):
 # Streamlit app
 st.set_page_config(page_title="Unit Converter", page_icon="📏", layout="centered")
 
-# Dark theme CSS with black text
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: #1e1e1e;
-        color: #000000; /* Black text */
-    }
-    .stNumberInput, .stSelectbox, .stButton button {
-        background-color: #2d2d2d;
-        color: #000000; /* Black text */
-        border: 1px solid #444;
-    }
-    .stButton button:hover {
-        background-color: #444;
-    }
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-        color: #000000; /* Black text */
-    }
-    .stMarkdown p {
-        color: #000000; /* Black text */
-    }
-    .stPlotlyChart {
-        background-color: #2d2d2d;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Title and description
 st.title("📏 Advanced Unit Converter")
 st.write("Convert units instantly with a clean and modern design!")
@@ -167,17 +137,15 @@ x = np.linspace(0, 100, 100)
 y = conversion_functions[category](x, from_unit, to_unit)
 
 fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(x, y, label=f"{from_unit} to {to_unit}", color='#6a11cb', linewidth=2.5)
+ax.plot(x, y, label=f"{from_unit} to {to_unit}", color='blue', linewidth=2.5)
 ax.scatter(value, result, color="red", s=100, label="Converted Value", zorder=5)
 ax.grid(True, linestyle='--', alpha=0.7)
-ax.annotate(f'{result:.2f} {to_unit}', xy=(value, result), xytext=(value + 5, result + 5), arrowprops=dict(facecolor='red', shrink=0.05), fontsize=12, color='black')
-ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold', color='black')
-ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold', color='black')
-ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold', color='black')
+ax.annotate(f'{result:.2f} {to_unit}', xy=(value, result), xytext=(value + 5, result + 5), arrowprops=dict(facecolor='red', shrink=0.05), fontsize=12, color='red')
+ax.set_xlabel(f"{from_unit}", fontsize=14, fontweight='bold')
+ax.set_ylabel(f"{to_unit}", fontsize=14, fontweight='bold')
+ax.set_title(f"{from_unit} to {to_unit} Conversion", fontsize=16, fontweight='bold')
 ax.legend(loc='upper left', fontsize=12, framealpha=0.9)
-ax.tick_params(axis='both', which='major', labelsize=12, colors='black')
-ax.set_facecolor('#2d2d2d')
-fig.patch.set_facecolor('#1e1e1e')
+ax.tick_params(axis='both', which='major', labelsize=12)
 st.pyplot(fig)
 
 # Footer
